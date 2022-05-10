@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List --> made by Bobby Mahanta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .loading-bar {
+            width: 100vw;
+            height: 100vh;
+            background: white url(/1490\ \(1\).gif) center no-repeat;
+            position: absolute;
+            top: 0;
+            z-index: 999;
+        }
+        /* =================
+    main > main container
+================== */
+        
+        main {
+            overflow: hidden;
+        }
+        
+        .hero {
+            width: 100%;
+            height: 100vh;
+            background-color: #4c4c4c;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            padding: 1rem 10px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        
+        .thought {
+            text-decoration: line-through;
+            /* transform: translateY(34rem); */
+            animation: anima 1s ease-out;
+        }
+        
+        @keyframes anima {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(34rem);
+            }
+        }
+        /* ============================
+ container 
+=====================================*/
+        
+        .container {
+            background-color: black;
+            width: 30rem;
+            max-width: 30rem;
+            height: auto;
+            border-radius: 30px;
+            /* text-align: center; */
+        }
+        
+        .container .input-con {
+            padding: 1rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-con h1 {
+            color: white;
+        }
+        
+        .input-con .btn_input-con {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        
+        .btn_input-con input {
+            width: 85%;
+            height: 2rem;
+            outline: none;
+            border: 1px solid #ffa500;
+            border-radius: 3px;
+            padding-left: 10px;
+        }
+        
+        .btn_input-con button {
+            width: 13%;
+            height: 2rem;
+            outline: none;
+            border: 1px solid #ffa500;
+            background: #ffa500;
+            color: white;
+            border-radius: 3px;
+        }
+        
+        .span-result {
+            display: block;
+            margin: auto;
+            width: 92%;
+            padding: 6px 10px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+        
+        .spann-result {
+            display: block;
+            margin: auto;
+            width: 92%;
+            padding: 6px 10px;
+            background: #d98d00;
+            color: white;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+        
+        .format {
+            position: absolute;
+            bottom: 6%;
+            right: 9%;
+            color: white;
+            padding: 8px 16px;
+            background: #ff6600;
+            border-radius: 3px;
+            border: none;
+        }
+        /* ==================
+media q
+========================== */
+        
+        @media screen and (max-width:500px) {
+            .btn_input-con button {
+                width: 16%;
+                font-size: 11px;
+            }
+            .span-result {
+                font-size: 15px;
+            }
+        }
+        
+        @media screen and (max-height:200px) {
+            .format {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body onload="load_data()">
+    <main class="hero">
+        <div class="loading-bar"></div>
+        <section class="container">
+            <div class="input-con">
+                <div class="logo">
+                    <h1>TODOS</h1>
+                </div>
+                <div class="btn_input-con">
+                    <input type="text" id="input">
+                    <button id="btn">SAVE</button>
+                </div>
+            </div>
+            <div class="result">
+            </div>
+            <button class="format">FORMAT</button>
+        </section>
+    </main>
+    <script>
+        function load_data() {
+            document.querySelector('.loading-bar').style.display = 'none';
+        }
+        const input = document.getElementById('input');
+        const btn = document.getElementById('btn');
+        const format = document.querySelector('.format');
+        var num = localStorage.length;
+        btn.addEventListener('click', () => {
+
+            var a = ++num;
+            num = a;
+            var span = document.createElement('span');
+            span.classList.add('span-result')
+            document.querySelector('.result').append(span);
+            span.innerText = input.value;
+            localStorage.setItem(`note${num}`, input.value);
+            input.value = '';
+            span.addEventListener('dblclick', (e) => {
+                e.target.classList.add('thought')
+                setTimeout(() => {
+                    e.target.remove();
+                    localStorage.removeItem(`note${num}`)
+                }, 1000);
+            })
+
+        })
+
+
+        for (let index = 1; index <= 200; index++) {
+            if (localStorage[`note${index}`]) {
+                var span2 = document.createElement('span');
+                span2.classList.add('spann-result');
+                document.querySelector('.result').append(span2);
+                span2.innerText = localStorage.getItem(`note${index}`)
+                span2.addEventListener('dblclick', (v) => {
+                    v.target.classList.add('thought');
+                    setTimeout(() => {
+                        v.target.remove();
+                        localStorage.removeItem(`note${index}`);
+                    }, 1000);
+
+                })
+            }
+        }
+        format.addEventListener('click', () => {
+            var sp = document.querySelectorAll('span');
+            var a = Array.from(sp);
+            a.forEach((f) => {
+                f.remove();
+            })
+            localStorage.clear();
+        })
+    </script>
+</body>
+
+</html>
